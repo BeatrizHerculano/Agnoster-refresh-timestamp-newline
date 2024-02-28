@@ -113,6 +113,24 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+# New Line
+prompt_newline() {
+  if [[ -n $CURRENT_BG ]]; then
+    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR
+%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+  else
+    echo -n " %{%k%}"
+  fi
+
+  echo -n " %{%f%}"
+  CURRENT_BG=''
+}
+
+# Timestamp
+prompt_timestamp() {
+  prompt_segment white black '%*'
+}
+
 function battery_charge {
   echo `~/bin/batcharge.py`
 }
@@ -121,8 +139,10 @@ function battery_charge {
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_timestamp
   prompt_git
   prompt_dir
+  prompt_newline
   prompt_end
 }
 
